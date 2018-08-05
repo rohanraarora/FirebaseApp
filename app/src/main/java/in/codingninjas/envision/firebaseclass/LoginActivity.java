@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText password;
 
     FirebaseAuth auth;
+    FirebaseAnalytics analytics;
 
 
     @Override
@@ -32,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
 
         auth = FirebaseAuth.getInstance();
+        analytics = FirebaseAnalytics.getInstance(this);
 
         FirebaseUser user = auth.getCurrentUser();
         if( user != null){
@@ -42,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
     public void signin(View view){
         String emailString = email.getEditableText().toString();
         String pass = password.getEditableText().toString();
+
+        analytics.logEvent("signin_clicked",null);
 
         auth.signInWithEmailAndPassword(emailString,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
